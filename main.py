@@ -1,4 +1,5 @@
-from flask import Flask, request, Response
+import os 
+from flask import Flask, request, Response, render_template
 import jsonpickle
 import numpy as np
 import cv2
@@ -33,27 +34,43 @@ def count(img):
     # print('number of seeds: %d' % len(large_contours))
     return len(large_contours)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    return "<h1>Test this api! <h1>"    
+    return render_template('index.html')  
 
 # route http posts to this method
-@app.route('/api/seed-count', methods=['POST'])
+@app.route('/', methods=['POST'])
 def process():
-    r = request
+    file = request.files['image']
+
+    if not file:
+        response = {'message': 'no file uploaded'}
+        # encode response using jsonpickle
+        response_pickled = jsonpickle.encode(response)
+
+        if request.host in request.base_url:
+            print("web")
+            return render_template('index.html', file=False, init=True)
+        else:
+            return Response(response=response_pickled, status=200, mimetype="application/json")
+
     # convert string of image data to uint8
-    nparr = np.frombuffer(r.data, np.uint8)
+    nparr = np.fromstring(file.read(), np.uint8)
     # decode image
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     # do some fancy processing here....
     result = count(img)
     # build a response dict to send back to client
-    response = {'message': 'no of seeds = {}'.format(result)
+    response = {'message': 'num of seeds = {}'.format(result)
                 }
     # encode response using jsonpickle
     response_pickled = jsonpickle.encode(response)
 
-    return Response(response=response_pickled, status=200, mimetype="application/json")
+    if request.host in request.base_url:
+        print("web")
+        return render_template('index.html', num_seeds=result, file=True, init=True)
+    else:
+        return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
 # start flask app

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seed Counting</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class = "container">
+    <div class = "starter-template">
+        <h1>Seed Counting Application</h1>
+        <p class = "lead"> Try uploading an image to count the number of seeds</p>
+        <!-- <p> <a href="https://docs.opencv.org/2.4/modules/objdetect/doc/cascade_classification.html" target="blank"> Cascade Classification </a> | Powered by Python, Flask, OpenCV </p> -->
+        <p> Image size limit: 2 MB </p>
+        <p> Made with ❤️ in CIC</p>
+    </div>
+</div>
+
+<header class="navbar">
+    <form action="/" method="post" enctype="multipart/form-data" >
+        <div align="center">
+            <label class="btn btn-default btn-file">
+                Browse <input type="file" name="image" style="display: none;">
+            </label>
+            <input type="submit" value="Submit your image" class="btn btn-primary">
+        </div>
+    </form>
+</header>
+
+<div class="text-center">
+    {% if init %}
+        {% if file %}
+            {% if num_seeds !=0 %}
+                <div class="alert alert-success" style="margin-top:18px;">
+                    <strong>Yayyy!</strong> {{ num_seeds }} seed(s) detected!
+                </div>
+            {% else %}
+                <div class="alert alert-danger" style="margin-top:18px;">
+                    <strong>Nope!</strong> No seed detected
+                </div>
+            {% endif %}
+        {%else %}
+            <div class="alert alert-danger" style="margin-top:18px;">
+                <strong>Heyyy!</strong> Please select an image file.
+            </div>
+        {% endif %}    
+    {% endif %}
+</div>
+
+</body>
+</html>
