@@ -26,7 +26,7 @@ kiwisolver==1.1.0
 MarkupSafe==1.1.1
 matplotlib==3.1.1
 mistune==0.8.4
-notebook==6.0.1
+notebook==6.4.10
 numpy==1.17.2
 opencv-python==4.1.1.26
 pandocfilters==1.4.2
